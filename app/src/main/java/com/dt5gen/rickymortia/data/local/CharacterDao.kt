@@ -1,0 +1,20 @@
+package com.dt5gen.rickymortia.data.local
+
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
+
+@Dao
+interface CharacterDao {
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(items: List<CharacterEntity>)
+
+    @Query("SELECT COUNT(*) FROM characters")
+    fun countFlow(): Flow<Int>
+
+    @Query("DELETE FROM characters")
+    suspend fun clearAll()
+}
