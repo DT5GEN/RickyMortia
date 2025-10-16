@@ -15,7 +15,7 @@ android {
     compileSdk = 36
     defaultConfig {
         applicationId = "com.dt5gen.rickymortia"
-        minSdk = 29          // было 30 — опускаем до 29, как решили
+        minSdk = 29
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -98,6 +98,8 @@ dependencies {
 
     implementation(platform(libs.coil.bom))
     implementation(libs.coil.compose)
+
+    implementation(libs.coil.kt.coil.compose)
 
     debugImplementation(libs.androidx.compose.ui.tooling)
 
