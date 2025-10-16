@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
+import androidx.paging.PagingSource
 
 @Dao
 interface CharacterDao {
@@ -17,4 +18,7 @@ interface CharacterDao {
 
     @Query("DELETE FROM characters")
     suspend fun clearAll()
+
+    @Query("SELECT * FROM characters ORDER BY id ASC")
+    fun pagingSource(): PagingSource<Int, CharacterEntity>
 }

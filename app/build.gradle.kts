@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.androidx.room)
 
+
 }
 
 android {
@@ -31,10 +32,13 @@ android {
         }
     }
 
-    // Важно: даже при kotlin.compose-плагине это нужно
-    buildFeatures { compose = true }
 
-    // Compose Compiler версию вручную НЕ задаём — её даёт плагин compose
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
+
+
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -73,10 +77,27 @@ dependencies {
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
+    implementation(libs.room.paging)
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
+
+    implementation(platform(libs.okhttp.bom))
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging)
+
+    implementation(libs.retrofit.core)
+    implementation(libs.retrofit.moshi)
+
+    implementation(libs.moshi)
+    ksp(libs.moshi.ksp)
+
+    implementation(libs.androidx.paging.runtime)
+    implementation(libs.androidx.paging.compose)
+
+    implementation(platform(libs.coil.bom))
+    implementation(libs.coil.compose)
 
     debugImplementation(libs.androidx.compose.ui.tooling)
 
