@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.RickyMortia" parent="Theme.Material3.Light.NoActionBar">
+        <!-- основной фон -->
+        <item name="android:windowSplashScreenBackground">#FFFFFF</item>
+
+        <!-- статичная иконка для системного сплэша -->
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_background</item>
+
+        <!-- Опционально задержка иконки (мс), чтобы «мягко» перейти к Compose-сплэшу -->
+        <item name="android:windowSplashScreenAnimationDuration">500</item>
+    </style>
+</resources>

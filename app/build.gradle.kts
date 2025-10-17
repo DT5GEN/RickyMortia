@@ -76,6 +76,7 @@ dependencies {
 
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
+    implementation(libs.androidx.compose.foundation.layout)
     ksp(libs.room.compiler)
     implementation(libs.room.paging)
 
@@ -98,8 +99,9 @@ dependencies {
 
     implementation(platform(libs.coil.bom))
     implementation(libs.coil.compose)
-
     implementation(libs.coil.kt.coil.compose)
+
+    implementation("com.google.android.material:material:1.12.0")
 
     debugImplementation(libs.androidx.compose.ui.tooling)
 
