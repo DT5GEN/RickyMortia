@@ -17,7 +17,7 @@ import com.dt5gen.rickymortia.data.local.CharacterEntity
 import com.dt5gen.rickymortia.data.CharactersPagingRepository
 
 @HiltViewModel
-class GreetingViewModel @Inject constructor(      // ← вот этот @Inject обязателен
+class RickyMortiaViewModel @Inject constructor(
     private val localRepo: CharacterLocalRepository,
     private val syncRepo: CharacterSyncRepository,
     private val pagingRepo: CharactersPagingRepository
