@@ -1,25 +1,33 @@
 package com.dt5gen.rickymortia.data.local
 
+import androidx.paging.PagingSource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Локальный репозиторий поверх Room-DAO.
+ */
 @Singleton
 class CharacterLocalRepository @Inject constructor(
     private val dao: CharacterDao
 ) {
+
+    // --- чтение/потоки/пэйджинг ---
+
     fun countFlow(): Flow<Int> = dao.countFlow()
 
-    suspend fun seedOneIfEmpty() {
+    fun pagingSource(): PagingSource<Int, CharacterEntity> = dao.pagingSource()
 
-        val seed = CharacterEntity(
-            id = 1L,
-            name = "Rick Sanchez",
-            species = "Human",
-            status = "Alive",
-            gender = "Male",
-            imageUrl = null
-        )
-        dao.insertAll(listOf(seed))
-    }
+    // --- запись/мутации ---
+
+    suspend fun insertAll(items: List<CharacterEntity>) = dao.insertAll(items)
+
+    suspend fun clearAll() = dao.clearAll()
+
+    /** Лайк/анлайк персонажа. */
+    suspend fun setLiked(id: Long, liked: Boolean) = dao.setLiked(id, liked)
+
+    /** Отметить/снять «изучено». */
+    suspend fun setStudied(id: Long, studied: Boolean) = dao.setStudied(id, studied)
 }

@@ -34,7 +34,7 @@ fun CharacterRow(item: CharacterEntity) {
     ) {
         SubcomposeAsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(item.imageUrl)     // поле из Entity, см. п.2 ниже
+                .data(item.imageUrl)     // поле из Entity
                 .crossfade(true)
                 .build(),
             contentDescription = item.name,
