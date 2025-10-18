@@ -18,7 +18,8 @@ fun AppRoot() {
                 onFinished = { showSplash = false }
             )
         } else {
-            CharactersListScreen(vm = vm)
+
+            CharactersListScreen()
         }
     }
 }

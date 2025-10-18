@@ -21,4 +21,11 @@ interface CharacterDao {
 
     @Query("SELECT * FROM characters ORDER BY id ASC")
     fun pagingSource(): PagingSource<Int, CharacterEntity>
+
+    @Query("UPDATE characters SET is_liked = :liked WHERE id = :id")
+    suspend fun setLiked(id: Long, liked: Boolean)
+
+    @Query("UPDATE characters SET is_studied = :studied WHERE id = :id")
+    suspend fun setStudied(id: Long, studied: Boolean)
+
 }
