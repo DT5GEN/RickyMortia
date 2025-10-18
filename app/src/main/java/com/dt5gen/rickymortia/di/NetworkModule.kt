@@ -1,5 +1,6 @@
 package com.dt5gen.rickymortia.di
 
+import com.dt5gen.rickymortia.BuildConfig
 import com.dt5gen.rickymortia.data.remote.RickAndMortyApi
 import com.squareup.moshi.Moshi
 import dagger.Module
@@ -11,7 +12,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
-import com.dt5gen.rickymortia.BuildConfig
 
 private const val BASE_URL = "https://rickandmortyapi.com/api/"
 

@@ -3,18 +3,22 @@ package com.dt5gen.rickymortia.ui
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dt5gen.rickymortia.data.local.CharacterLocalRepository
-import com.dt5gen.rickymortia.data.remote.CharacterSyncRepository
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.dt5gen.rickymortia.data.CharactersPagingRepository
 import com.dt5gen.rickymortia.data.local.CharacterEntity
+import com.dt5gen.rickymortia.data.local.CharacterLocalRepository
+import com.dt5gen.rickymortia.data.remote.CharacterSyncRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
-import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class RickyMortiaViewModel @Inject constructor(
@@ -23,44 +27,53 @@ class RickyMortiaViewModel @Inject constructor(
     private val pagingRepo: CharactersPagingRepository
 ) : ViewModel() {
 
-    val message = localRepo.countFlow()
-        .map { count -> "Characters in DB: $count" }
-        .stateIn(
-            viewModelScope,
-            started = SharingStarted.Eagerly,
-            initialValue = "Characters in DB: 0"
-        )
+    /* ---------- Поиск ---------- */
+
+    // состояние поискового запроса
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
+
+    fun onSearchChange(value: String) {
+        _searchQuery.value = value
+    }
+
+    /* ---------- Пейджинг с учётом поиска ---------- */
 
     val characters: Flow<PagingData<CharacterEntity>> =
-        pagingRepo.pagedCharacters(pageSize = 20)
+        searchQuery
+            .debounce(250)
+            .distinctUntilChanged()
+            .flatMapLatest { q ->
+                pagingRepo.pagedCharacters(
+                    pageSize = 20,
+                    query = q.takeIf { it.isNotBlank() } // null/blank -> без фильтра
+                )
+            }
+            .cachedIn(viewModelScope)
+
+    /* ---------- Синхронизация ---------- */
 
     init {
-        Log.d("SyncRepo", "GreetingViewModel init started")
+        Log.d("SyncRepo", "RickyMortiaViewModel init started")
         viewModelScope.launch {
             runCatching { syncRepo.syncFirstPage() }
-                .onFailure { Log.e("SyncRepo", "sync error", it) }
+                .onFailure { t -> Log.e("SyncRepo", "sync error", t) }
         }
     }
 
-    /** Лайк/анлайк персонажа. */
+    /* ---------- Обработчики кликов карточки ---------- */
+
     fun onLikeClick(item: CharacterEntity) {
         viewModelScope.launch {
-            try {
-                localRepo.setLiked(item.id, !item.isLiked)
-            } catch (t: Throwable) {
-                Log.e("LocalRepo", "setLiked error", t)
-            }
+            runCatching { localRepo.setLiked(item.id, !item.isLiked) }
+                .onFailure { t -> Log.e("LocalRepo", "setLiked error", t) }
         }
     }
 
-    /** Отметить/снять «изучено». */
     fun onStudiedClick(item: CharacterEntity) {
         viewModelScope.launch {
-            try {
-                localRepo.setStudied(item.id, !item.isStudied)
-            } catch (t: Throwable) {
-                Log.e("LocalRepo", "setStudied error", t)
-            }
+            runCatching { localRepo.setStudied(item.id, !item.isStudied) }
+                .onFailure { t -> Log.e("LocalRepo", "setStudied error", t) }
         }
     }
 }

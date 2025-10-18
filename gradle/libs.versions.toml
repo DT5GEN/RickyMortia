@@ -20,6 +20,7 @@ okhttpBom = "4.12.0"
 paging = "3.3.2"
 coil = "2.7.0"
 foundationLayout = "1.9.3"
+foundation = "1.9.3"
 
 
 
@@ -69,6 +70,7 @@ androidx-compose-foundation-layout = { group = "androidx.compose.foundation", na
 
 
 androidx-compose-foundation = { module = "androidx.compose.foundation:foundation" }
+androidx-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
 
 
 
