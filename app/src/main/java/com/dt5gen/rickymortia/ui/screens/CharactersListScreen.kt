@@ -1,4 +1,4 @@
-package com.dt5gen.rickymortia.ui
+package com.dt5gen.rickymortia.ui.screens
 
 
 import androidx.compose.animation.animateColorAsState
@@ -53,11 +53,12 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.dt5gen.rickymortia.ui.RickyMortiaViewModel
 import com.dt5gen.rickymortia.ui.theme.CharacterCard
 
 
-private val ScreenGutter = 16.dp      // отступ,
-private val SearchHeight = 44.dp      // ~30% ниже стандартных 56dp
+private val ScreenGutter = 16.dp
+private val SearchHeight = 44.dp
 
 @Composable
 fun CharactersListScreen(
@@ -94,7 +95,7 @@ fun CharactersListScreen(
                 }
         ) {
             LazyVerticalGrid(
-                state = gridState,   // <-- не забудь передать
+                state = gridState,
                 columns = GridCells.Fixed(2),
                 contentPadding = PaddingValues(8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),

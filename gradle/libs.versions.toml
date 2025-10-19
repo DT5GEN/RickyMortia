@@ -21,6 +21,9 @@ paging = "3.3.2"
 coil = "2.7.0"
 foundationLayout = "1.9.3"
 foundation = "1.9.3"
+coreSplashscreen = "1.0.1"
+ui = "1.9.3"
+composeMaterial3 = "1.5.3"
 
 
 
@@ -71,6 +74,9 @@ androidx-compose-foundation-layout = { group = "androidx.compose.foundation", na
 
 androidx-compose-foundation = { module = "androidx.compose.foundation:foundation" }
 androidx-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
+androidx-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "ui" }
+compose-material3 = { group = "androidx.wear.compose", name = "compose-material3", version.ref = "composeMaterial3" }
 
 
 
