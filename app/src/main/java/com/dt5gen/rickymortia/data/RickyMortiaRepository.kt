@@ -4,18 +4,18 @@ import com.dt5gen.rickymortia.data.local.CharacterDao
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/** Контракт репозитория приложения. */
+/** Публичный контракт репозитория для UI. */
 interface RickyMortiaRepository {
     fun message(): String
 
-    /** Лайк / анлайк персонажа. */
+    /** Поменять/снять отметку "избранное". */
     suspend fun toggleLiked(id: Long, liked: Boolean)
 
-    /** Пометить как изученного / снять пометку. */
+    /** Поменять/снять отметку "выучено". */
     suspend fun toggleStudied(id: Long, studied: Boolean)
 }
 
-/** Реализация, работающая поверх Room DAO. */
+/** Реализация на Room DAO. */
 @Singleton
 class RickyMortiaRepositoryImpl @Inject constructor(
     private val dao: CharacterDao
@@ -24,10 +24,12 @@ class RickyMortiaRepositoryImpl @Inject constructor(
     override fun message(): String = "Hello from Hilt DI"
 
     override suspend fun toggleLiked(id: Long, liked: Boolean) {
-        dao.setLiked(id, liked)
+
+        dao.setFavorite(id = id, value = liked)
     }
 
     override suspend fun toggleStudied(id: Long, studied: Boolean) {
-        dao.setStudied(id, studied)
+
+        dao.setStudied(id = id, value = studied)
     }
 }

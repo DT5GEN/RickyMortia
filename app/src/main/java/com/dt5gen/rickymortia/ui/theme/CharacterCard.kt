@@ -97,7 +97,7 @@ fun CharacterCard(
                 name = item.name,
                 species = "${item.gender} | ${item.species}",
                 status = item.status ?: "Unknown",
-                liked = item.isLiked,
+                liked = item.isFavorite,
                 onLike = { onLike(item) }
             )
         }

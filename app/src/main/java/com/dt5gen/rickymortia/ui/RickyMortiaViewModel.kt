@@ -65,7 +65,7 @@ class RickyMortiaViewModel @Inject constructor(
 
     fun onLikeClick(item: CharacterEntity) {
         viewModelScope.launch {
-            runCatching { localRepo.setLiked(item.id, !item.isLiked) }
+            runCatching { localRepo.setLiked(item.id, !item.isFavorite) }
                 .onFailure { t -> Log.e("LocalRepo", "setLiked error", t) }
         }
     }

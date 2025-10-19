@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -13,11 +14,12 @@ interface CharacterDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(items: List<CharacterEntity>)
 
+    @Query("DELETE FROM characters")
+    suspend fun clearAll()
     @Query("SELECT COUNT(*) FROM characters")
     fun countFlow(): Flow<Int>
 
-    @Query("DELETE FROM characters")
-    suspend fun clearAll()
+
 
     // Базовый источник для пейджинга (весь список)
     @Query("SELECT * FROM characters ORDER BY id ASC")
@@ -37,10 +39,20 @@ interface CharacterDao {
     """)
     fun pagingSourceFiltered(q: String): PagingSource<Int, CharacterEntity>
 
-    // Лайк / изучено
-    @Query("UPDATE characters SET is_liked = :liked WHERE id = :id")
-    suspend fun setLiked(id: Long, liked: Boolean)
+    @Upsert
+    suspend fun upsertAll(items: List<CharacterEntity>)
 
-    @Query("UPDATE characters SET is_studied = :studied WHERE id = :id")
-    suspend fun setStudied(id: Long, studied: Boolean)
+    // --- Избранное / «выучено» / счётчик викторины ---
+    @Query("UPDATE characters SET isFavorite = :value WHERE id = :id")
+    suspend fun setFavorite(id: Long, value: Boolean)
+
+    @Query("UPDATE characters SET isStudied = :value WHERE id = :id")
+    suspend fun setStudied(id: Long, value: Boolean)
+
+    @Query("UPDATE characters SET studiedCorrect = :count WHERE id = :id")
+    suspend fun setStudiedCorrect(id: Int, count: Int)
+
+    // -------- ДОБАВЛЕНО: чтение существующих сущностей пачкой по id --------
+    @Query("SELECT * FROM characters WHERE id IN (:ids)")
+    suspend fun getByIds(ids: List<Long>): List<CharacterEntity>
 }
