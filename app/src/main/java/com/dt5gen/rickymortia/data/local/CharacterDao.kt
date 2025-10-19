@@ -39,7 +39,12 @@ interface CharacterDao {
     """)
     fun pagingSourceFiltered(q: String): PagingSource<Int, CharacterEntity>
 
-    @Upsert
+    /** Получить одного персонажа по id (для экрана деталей). */
+    @Query("SELECT * FROM characters WHERE id = :id LIMIT 1")
+    suspend fun getById(id: Long): CharacterEntity?
+
+    /** Вставка/обновление списка. OnConflict = REPLACE, чтобы освежать кеш. */
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertAll(items: List<CharacterEntity>)
 
     // --- Избранное / «выучено» / счётчик викторины ---

@@ -63,7 +63,8 @@ private val SearchHeight = 44.dp
 @Composable
 fun CharactersListScreen(
     modifier: Modifier = Modifier,
-    viewModel: RickyMortiaViewModel = hiltViewModel(),
+    viewModel: RickyMortiaViewModel,
+    onOpenDetails: (Long) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val gridState = rememberLazyGridState()
@@ -107,6 +108,7 @@ fun CharactersListScreen(
                     val item = lazyPagingItems[index] ?: return@items
                     CharacterCard(
                         item = item,
+                        onClick = { onOpenDetails(item.id)},
                         onLike = { viewModel.onLikeClick(item) },
                         onStudied = { viewModel.onStudiedClick(item) }
                     )
