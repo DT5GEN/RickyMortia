@@ -79,6 +79,9 @@ dependencies {
     implementation(libs.room.ktx)
     implementation(libs.androidx.compose.foundation.layout)
     implementation(libs.androidx.foundation)
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.ui)
+    implementation(libs.compose.material3)
     ksp(libs.room.compiler)
     implementation(libs.room.paging)
 
