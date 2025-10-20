@@ -3,7 +3,6 @@ package com.dt5gen.rickymortia.ui.screens
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -45,14 +44,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.dt5gen.rickymortia.helpers.clearFocusOnTap
 import com.dt5gen.rickymortia.ui.RickyMortiaViewModel
 import com.dt5gen.rickymortia.ui.theme.CharacterCard
 
@@ -86,14 +84,13 @@ fun CharactersListScreen(
             )
         }
     ) { inner ->
-        // Любой тап по контенту —  снимает фокус
+
         Box(
             modifier = modifier
                 .fillMaxSize()
                 .padding(inner)
-                .pointerInput(Unit) {
-                    detectTapGestures { focusManager.clearFocus() }
-                }
+                .clearFocusOnTap(focusManager)
+
         ) {
             LazyVerticalGrid(
                 state = gridState,
@@ -103,12 +100,13 @@ fun CharactersListScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(
-                    count = lazyPagingItems.itemCount
+                    count = lazyPagingItems.itemCount,
+                    key = { index -> lazyPagingItems[index]?.id ?: index }
                 ) { index ->
                     val item = lazyPagingItems[index] ?: return@items
                     CharacterCard(
                         item = item,
-                        onClick = { onOpenDetails(item.id)},
+                        onClick = { onOpenDetails(item.id) },
                         onLike = { viewModel.onLikeClick(item) },
                         onStudied = { viewModel.onStudiedClick(item) }
                     )

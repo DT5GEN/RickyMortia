@@ -51,7 +51,7 @@ fun CharacterCard(
     onStudied: (CharacterEntity) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Card(
+    Card(onClick = onClick,
         modifier = modifier,
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -203,7 +203,7 @@ private fun FavoriteHeart(
     )
 }
 
-/** Прозрачный (без подложки) статус внизу карточки, шрифт поменьше */
+/** Прозрачный (без подложки) статус внизу карточки */
 @Composable
 private fun StatusPillCentered(text: String) {
     Row(verticalAlignment = Alignment.CenterVertically) {
