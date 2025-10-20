@@ -46,15 +46,17 @@ import com.dt5gen.rickymortia.data.local.CharacterEntity
 @Composable
 fun CharacterCard(
     item: CharacterEntity,
+    onClick: () -> Unit,
     onLike: (CharacterEntity) -> Unit,
     onStudied: (CharacterEntity) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Card(
+    Card(onClick = onClick,
         modifier = modifier,
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+
     ) {
         Column {
 
@@ -97,7 +99,7 @@ fun CharacterCard(
                 name = item.name,
                 species = "${item.gender} | ${item.species}",
                 status = item.status ?: "Unknown",
-                liked = item.isLiked,
+                liked = item.isFavorite,
                 onLike = { onLike(item) }
             )
         }
@@ -201,7 +203,7 @@ private fun FavoriteHeart(
     )
 }
 
-/** Прозрачный (без подложки) статус внизу карточки, шрифт поменьше */
+/** Прозрачный (без подложки) статус внизу карточки */
 @Composable
 private fun StatusPillCentered(text: String) {
     Row(verticalAlignment = Alignment.CenterVertically) {

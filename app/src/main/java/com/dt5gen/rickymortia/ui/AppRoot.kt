@@ -38,6 +38,9 @@ import com.dt5gen.rickymortia.ui.screens.FilterScreen
 import com.dt5gen.rickymortia.ui.screens.QuizScreen
 import com.dt5gen.rickymortia.ui.splash.SplashScreen
 import com.dt5gen.rickymortia.ui.theme.AppTheme
+import androidx.navigation.navArgument
+import androidx.navigation.NavType
+import com.dt5gen.rickymortia.ui.screens.CharacterDetailsRoute
 
 @Composable
 fun AppRoot() {
@@ -82,14 +85,24 @@ private fun MainApp(vm: RickyMortiaViewModel) {
         NavHost(
             navController = navController,
             startDestination = Dest.Home.route,
-            modifier = Modifier
-                .padding(inner)
-                .windowInsetsPadding(topInsets)
-                .consumeWindowInsets(inner)
+            modifier = Modifier.padding(inner)
         ) {
-            composable(Dest.Home.route)   { CharactersListScreen(viewModel = vm) }
+            composable(Dest.Home.route) {
+                CharactersListScreen(
+                    viewModel = vm,
+                    onOpenDetails = { id -> navController.navigate("details/$id") } // <<< НОВОЕ
+                )
+            }
             composable(Dest.Filter.route) { FilterScreen() }
             composable(Dest.Quiz.route)   { QuizScreen() }
+
+            // <<< НОВЫЙ экран (не в нижнем меню)
+            composable(
+                route = "details/{id}",
+                arguments = listOf(navArgument("id") { type = NavType.LongType })
+            ) {
+                CharacterDetailsRoute(onBack = { navController.popBackStack() })
+            }
         }
     }
 }

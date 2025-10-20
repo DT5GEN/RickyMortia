@@ -26,7 +26,7 @@ class CharacterLocalRepository @Inject constructor(
     suspend fun clearAll() = dao.clearAll()
 
     /** Лайк/анлайк персонажа. */
-    suspend fun setLiked(id: Long, liked: Boolean) = dao.setLiked(id, liked)
+    suspend fun setLiked(id: Long, liked: Boolean) = dao.setFavorite(id, liked)
 
     /** Отметить/снять «изучено». */
     suspend fun setStudied(id: Long, studied: Boolean) = dao.setStudied(id, studied)
