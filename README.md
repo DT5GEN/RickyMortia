@@ -64,7 +64,7 @@ app/
 
 ## 🎬 Demo
 
-  <img src="res/assets/demo.gif" alt="App demo" width="450" />
+  <img src="app/src/main/res/assets/demo.gif" alt="App demo" width="450" />
 
 
 ---
