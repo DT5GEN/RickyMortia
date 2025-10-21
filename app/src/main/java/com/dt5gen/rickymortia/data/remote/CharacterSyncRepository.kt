@@ -2,7 +2,6 @@ package com.dt5gen.rickymortia.data.remote
 
 import com.dt5gen.rickymortia.data.local.CharacterDao
 import com.dt5gen.rickymortia.data.local.CharacterEntity
-import com.dt5gen.rickymortia.data.remote.dto.CharacterDto
 import com.dt5gen.rickymortia.data.remote.dto.toEntity
 import javax.inject.Inject
 import javax.inject.Singleton

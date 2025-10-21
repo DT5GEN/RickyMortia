@@ -1,7 +1,17 @@
 package com.dt5gen.rickymortia.ui.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,12 +34,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,15 +61,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-/* =========================================================
-   РОУТ ДЛЯ NAVIGATION
-
-   NavHost:
-   composable("details/{id}") { CharacterDetailsRoute(onBack = { navController.popBackStack() }) }
-
-   Вызов:
-   navController.navigate("details/$id")
-   ========================================================= */
 
 @Composable
 fun CharacterDetailsRoute(
@@ -108,6 +105,7 @@ class CharacterDetailsViewModel @Inject constructor(
     init {
         reload(force = false)
     }
+
     fun reload(force: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             _state.update { it.copy(loading = true, error = null) }
@@ -131,8 +129,9 @@ class CharacterDetailsViewModel @Inject constructor(
     }
 
     private suspend fun refreshFromNetwork(old: CharacterEntity?) {
-        val dto: CharacterDto = api.getCharacter(id) // метод в твоём Api уже есть
-        val merged: CharacterEntity = dto.toEntity(old) // твой расширение-маппер с переносом локальных полей
+        val dto: CharacterDto = api.getCharacter(id) // метод в  Api  есть
+        val merged: CharacterEntity =
+            dto.toEntity(old) // расширение-маппер с переносом локальных полей
         dao.upsertAll(listOf(merged)) // вставка/обновление (REPLACE)
         _state.update { it.copy(loading = false, entity = merged, error = null) }
     }
@@ -157,8 +156,7 @@ class CharacterDetailsViewModel @Inject constructor(
 
     fun toggleTranslate() {
         _state.update { it.copy(translated = !it.translated) }
-        // здесь можно дернуть кеш перевода/вызвать переводчик — в рамках файла оставляю состояние,
-        // чтобы не тащить дополнительные зависимости.
+
     }
 }
 
@@ -200,19 +198,28 @@ private fun CharacterDetailsScreen(
     ) { inner ->
         when {
             state.loading && state.entity == null -> {
-                Box(Modifier.fillMaxSize().padding(inner), contentAlignment = Alignment.Center) {
+                Box(Modifier
+                    .fillMaxSize()
+                    .padding(inner), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
                 }
             }
+
             state.error != null && state.entity == null -> {
-                Box(Modifier.fillMaxSize().padding(inner), contentAlignment = Alignment.Center) {
+                Box(Modifier
+                    .fillMaxSize()
+                    .padding(inner), contentAlignment = Alignment.Center) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("Не удалось загрузить персонажа", color = MaterialTheme.colorScheme.error)
+                        Text(
+                            "Не удалось загрузить персонажа",
+                            color = MaterialTheme.colorScheme.error
+                        )
                         Spacer(Modifier.height(8.dp))
                         FilledTonalButton(onClick = onRetry) { Text("Повторить") }
                     }
                 }
             }
+
             else -> {
                 val item = state.entity ?: return@Scaffold
                 Column(

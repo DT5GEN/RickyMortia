@@ -25,7 +25,7 @@ data class CharacterDto(
     )
 }
 
-/** Бережный маппинг DTO -> Entity c переносом локальных флагов из старой записи. */
+/**  маппинг DTO -> Entity c переносом локальных флагов из старой записи. */
 fun CharacterDto.toEntity(old: CharacterEntity?): CharacterEntity = CharacterEntity(
     id = id ?: 0,
     name = name.orEmpty(),
